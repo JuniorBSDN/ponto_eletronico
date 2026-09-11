@@ -10,14 +10,18 @@ app = Flask(__name__)
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_ANON_KEY")
 
-# Suporte compatível caso utilize a chave DB_PONTO_ON na Vercel
 if not SUPABASE_URL:
     db_ponto = os.environ.get("DB_PONTO_ON", "")
     SUPABASE_URL = db_ponto if db_ponto.startswith("http") else None
 
-if SUPABASE_URL and SUPABASE_KEY:
-    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-else:
+# PROTEÇÃO CONTRA CRASH FATAL: Impede que erro de URL derrube a Vercel
+try:
+    if SUPABASE_URL and SUPABASE_KEY:
+        supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    else:
+        supabase = None
+except Exception as e:
+    print(f"Erro ao conectar com Supabase: {e}")
     supabase = None
 
 

@@ -516,7 +516,7 @@ CLÁUSULA TERCEIRA - DA VIGÊNCIA: O contrato entra em vigor na data de sua conf
 
             try {
                 // Faz a chamada para o backend Python (que lê a variável na Vercel)
-                const response = await fetch('/api/login-master', {
+                const response = await fetch(`${window.location.origin}/api/login-master`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ senha: pass })
